@@ -16,13 +16,11 @@
         placeholder="Recipe Instructions"
         required
       ></textarea>
-      <!-- Event binding lets you listen for and respond to user actions such as keystrokes, mouse movements, clicks, and touches. Difference is that in simple html and angular is the html use onchange and angular is (eventname like change) -->
       <button (click)="addRecipe()">Add Recipe</button>
     </section>
     <section id="recipes-list">
       <ul>
-        <li *NgFor="let recipe of recipes" [attr.data-id]="recipe.id">
-          <!-- interpolation ma hum single line ya type script code ya javascript code likh sakty ho -->
+        <li *ngFor="let recipe of recipes">
           <div>{{ recipe.name }}: {{ recipe.instructions }}</div>
           <div class="buttons">
             <button (click)="deleteRecipe(recipe.id)">Delete</button>

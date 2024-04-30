@@ -23,9 +23,7 @@ export class AppComponent implements OnInit {
 
   loadRecipes(): void {
     const storedRecipes = localStorage.getItem('recipes');
-    if (storedRecipes) {
-      this.recipes = JSON.parse(storedRecipes);
-    }
+    this.recipes = storedRecipes ? JSON.parse(storedRecipes) : [];
   }
 
   addRecipe(): void {
@@ -40,13 +38,13 @@ export class AppComponent implements OnInit {
       nameInput.value.trim() !== '' &&
       instructionsInput.value.trim() !== ''
     ) {
-      const recipe: Recipe = {
+      const newRecipe: Recipe = {
         id: Date.now(),
         name: nameInput.value.trim(),
         instructions: instructionsInput.value.trim(),
       };
 
-      this.recipes.push(recipe);
+      this.recipes.push(newRecipe);
       localStorage.setItem('recipes', JSON.stringify(this.recipes));
 
       nameInput.value = '';
@@ -60,8 +58,8 @@ export class AppComponent implements OnInit {
   }
 
   editRecipe(id: number): void {
-    let recipe = this.recipes.find((recipe) => recipe.id === id);
-    if (!recipe) return;
+    const index = this.recipes.findIndex((recipe) => recipe.id === id);
+    if (index === -1) return; // Check if recipe exists
 
     const nameInput = document.getElementById(
       'recipe-name'
@@ -70,11 +68,13 @@ export class AppComponent implements OnInit {
       'recipe-instructions'
     ) as HTMLInputElement;
 
-    nameInput.value = recipe.name;
-    instructionsInput.value = recipe.instructions;
+    // Update the recipe in the array
+    this.recipes[index] = {
+      ...this.recipes[index],
+      name: nameInput.value.trim(),
+      instructions: instructionsInput.value.trim(),
+    };
 
-    // To finalize the edit, the user would typically need to confirm the changes
-    // This can be handled by a separate method or by reusing addRecipe with some modifications
-    this.deleteRecipe(id); // Temporarily remove the recipe to avoid duplication
+    localStorage.setItem('recipes', JSON.stringify(this.recipes));
   }
 }
