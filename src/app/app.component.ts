@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
       name: nameInput.value.trim(),
       instructions: instructionsInput.value.trim(),
     };
-
+    console.log('Updated Recipe:', this.recipes[index]);
     localStorage.setItem('recipes', JSON.stringify(this.recipes));
   }
 }
